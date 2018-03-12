@@ -42,7 +42,7 @@ func swap(sum int) (x, y int) {
 ```
 
 Function in golang can be a closures.
-A closure is a function value that references variables from outside its body. 
+A closure is a function value that references variables from outside its body.
 The function may access and assign to the referenced variables; in this sense the function is "bound" to the variables.
 Ex:
 ```go
@@ -571,4 +571,107 @@ var a Str
 // because `a` is implemented `Speak()` method.
 a.Speak()
 ```
+
+You can't call method from a nil interface. We will use interface from example above.
+Ex:
+```go
+// This won't work
+var i Human
+i.Speak() // You will get an error here
+
+// This will work
+var i Human
+var t Str
+i = t
+i.Speak() // This will return nil value because we didn't assign any value to `t`
+```
+
+You can create empty interface. Empty interface may hold any values of any type, that at least have zero methods.
+Ex:
+```go
+var i interface{}
+i // nil
+i = 42 // int
+i = "string" // string
+```
+
+You can check whether a type exists in interface using __type assertions__.
+Ex:
+```go
+var i interface{}
+
+s, ok := i.(string) // Type assertions can return two values. If there is no `type string` then `ok` will be `false`
+
+f := i.(float64) // This will trigger `panic` because you don't provide the second value (`ok`)
+```
+
+----
+
+#### Goroutines
+
+Goroutines is a lightweight thread managed by the Go runtime. Goroutine create with `go` keyword
+Ex:
+```go
+go Function(x, y)
+```
+Here `Function` will be running on new goroutine while the execution time is on current goroutine.
+
+----
+
+#### Channels
+
+Channel is used for communicate between go routine. Channel declared with `chan` keyword.
+Ex:
+```go
+c := make(chan int)
+
+c <- 1 // Send 1 to channel c
+<-c // Receive from channel c
+```
+
+Send and receive is block until the other side is ready.
+Object that passed through a channel must be on the same type.
+You can create __buffered channel__ with `make` keyword by provide a second argument as the length of buffer channel
+Ex:
+```go
+
+c := make(chan int 2)
+c <- 1
+c <- 2
+c <- 3 // You can't overfill the channel bigger than its size
+```
+
+You can close the channel with `close(channel)`. Only the sender should close the channel, not
+the receiver.
+You can check whether the channel is closed by `v, ok := <-channel`. `ok` will be false if there are no more
+values and the channel is closed.
+You can loop channel with `range`
+Ex:
+```go
+func fibonacci(n int, c chan int) {
+  x, y := 0, 1
+  for i := 0; i < n; i++ {
+    c <- x
+    x, y = y, x+y
+  }
+  close(c)
+}
+
+func main() {
+  c := make(chan int, 10)
+  go fibonacci(cap(c), c)
+  for i := range c {
+    fmt.Println(i)
+  }
+}
+```
+
+----
+
+#### Select
+
+`select` statement lets a goroutine wait on multiple communication operations.
+
+---
+
 
