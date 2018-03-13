@@ -1,5 +1,13 @@
 # Go Programming Language
 
+#### Installing Go
+
+When installing Go, you need to set `$GOPATH` which by default is `$HOME/go`.
+But you can change it as you wish but make sure you set it in your `zshrc` or `bashrc` file.
+Actually you can refer the this [link](https://golang.org/doc/code.html#Workspaces) as this is the official documentation
+
+---
+
 - GO program made of packages
 - GO program start running in `main` package
 
@@ -71,7 +79,7 @@ func main() {
 
 Variables are defined with `var` keyword and can be inside package or function level. Variables can have an initializer, one per variable.
 If variables defined with an initializer, then we can omit the data type and the variable will take the type of the initializer
-Ex: 
+Ex:
 
 ```go
 var i, k int = 1, 2
@@ -266,7 +274,7 @@ How to read pointers? (Thanks to mas Iman for this tips :thumbsup:)
 ----
 
 There is also `struct` in Golang. `struct` is collection of fields.
-Ex: 
+Ex:
 ```go
 type Str struct {
   number int
@@ -551,7 +559,7 @@ Sum(s)
 #### Interface
 
 Interface in Golang is an collection of methods. Interface is like *duck typing* in Ruby. For example,
-if you declare interface `human` with `Speak()` as the method inside the interface. Then if any type implement 
+if you declare interface `human` with `Speak()` as the method inside the interface. Then if any type implement
 `Speak()` method then that is type *implicitly* is a `human`. So it's like *if you walk like a duck, swim like a duck then you are duck*.
 Ex:
 ```go
@@ -674,4 +682,43 @@ func main() {
 
 ---
 
+#### Testing in Go
 
+Golang has built-in testing called `go test` and a package `testing` which combine to give a minimal but complete
+testing experience. In Golang, the syntax is deliberately avoids the use of assertions and leaves the responsibility for checking
+value and behaviour to the developer (like using `assert` and `expect` keyword in RSpec and UnitTest).
+
+Characteristics of a Golang test function:
+- The first and only parameter needs to be `t *testing.T`
+- It begins with the word `Test` followed by a word or phrase starting with a capital letter.
+- Usually the method under test. I.e: `TestValidateClient`
+- Calls `t.Error` or `t.Fail` to indicate a failure (`t.Errorf` have more details. Prefer to use it).
+- `t.Log` can be used to provide non-failing debug information.
+- Must be saved in a file named `something_test.go`.
+
+If you have code and test in the same folder then you cannot execute your program using `go run *.go`. Use `go build`
+and run the binary file instead.
+Ex:
+```go
+package main
+
+func Sum(x, y int) int {
+  return x+y
+}
+
+func main() {
+  Sum(5, 10)
+}
+
+// Unit test part
+package main
+
+import "testing"
+
+func TestSum(t *testing.T) {
+  total := Sum(5, 10)
+  if total != 15 {
+    t.Errorf("Sum was incorrect, got: %d, want: %d.", total, 15)
+  }
+}
+```
