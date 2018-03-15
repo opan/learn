@@ -110,6 +110,27 @@ Key features:
 
 ---
 
+## Installation Chronograf / Grafana
+
+#### Installing Chronograf
+
+- OS X: `brew update && brew install chronograf`
+- Ubuntu/Debian:
+```
+wget https://dl.influxdata.com/chronograf/releases/chronograf_1.4.2.3_amd64.deb
+sudo dpkg -i chronograf_1.4.2.3_amd64.deb
+```
+
+#### Running Up Chronograf
+
+- Run Chronograf server:
+  - OS X: `brew services start chronograf`
+  - Ubuntu/Debian: `sudo systemctl start chronograf`
+- Now access from browser `localhost:8888`. You can change default port that Chronograf used
+by provide the `--port` command, e.g `chronograf --port=9999` or by adding environment variable `PORT`
+
+
+---
 
 ## Integrating TICK component
 
@@ -120,6 +141,9 @@ Quick summary:
 - Kapacitor provides alerting and detects anomalies in time-series data
 
 Integrating the components:
+
+#### Setup InfluxDB
+
 - Start influxdb console with `influx` command.
 - Create new database `create database your_db;`
 - Create new admin user `create admin "username" with password 'user_password' with all privileges;`
@@ -138,6 +162,8 @@ Integrating the components:
 This config will enabled user authentication over HTTP/HTTPS. Then restart influxdb server
 with `sudo systemctl restart influxdb` or `brew services restart influxdb` (execute similar command in you OS)
 
+#### Setup Telegraf
+
 - Update Telegraf config:
   - Ubuntu/Debian: `/etc/telegraf/telegraf.conf` or find with `sudo systemctl status telegraf`
   - OS X: `/usr/local/etc/telegraf.conf` or find with `brew info telegraf`
@@ -152,6 +178,23 @@ create in steps above for influxdb
   ...
 ```
 and then restart Telegraf service `sudo systemctl restart telegraf` (execute similar command in your OS)
+
+#### Setup Kapacitor
+
+- Update Kapacitor config:
+  - Ubuntu/Debian: `/etc/kapacitor/kapacitor.conf` or find with `sudo systemctl status kapacitor`
+  - OS X: `/usr/local/etc/kapacitor.conf` or find with `brew info kapacitor`
+
+- Find `[[influxdb]]` and add username and password to connect to influxdb database
+```
+[[influxdb]]
+  ...
+  username = "username"
+  password = "password"
+  ...
+```
+- Then restart Kapacitor service (the command is similar like the other component, just change the service name)
+- You can verify if Kapacitor is running with `kapacitor task lists`
 
 
 ---
