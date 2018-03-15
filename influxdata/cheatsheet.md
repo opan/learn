@@ -127,7 +127,29 @@ sudo dpkg -i chronograf_1.4.2.3_amd64.deb
   - OS X: `brew services start chronograf`
   - Ubuntu/Debian: `sudo systemctl start chronograf`
 - Now access from browser `localhost:8888`. You can change default port that Chronograf used
-by provide the `--port` command, e.g `chronograf --port=9999` or by adding environment variable `PORT`
+by provide the `--port` command, e.g `chronograf --port=9999` or by adding environment variable `PORT`.
+Or you can change the port from `chronograf.service`. In Ubuntu it is located in `/lib/systemd/system/chronograf.service`.
+
+#### Installing Grafana
+
+- Ubuntu/Debian:
+```
+wget https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana_5.0.2_amd64.deb 
+sudo dpkg -i grafana_5.0.2_amd64.deb 
+```
+- OS X: `brew update && brew install grafana`
+
+#### Running Up Grafana
+
+- Start Grafana server:
+  - Ubuntu/Debian: `sudo systemctl start grafana-server`
+  - OS X: `brew services start grafana`
+- You can check the config file from:
+  - Ubuntu/Debian: `sudo systemctl status grafana-server`
+- To start Grafana server at boot time you can:
+  - Ubuntu/Debian: `sudo update-rc.d grafana-server defaults` or `sudo systemctl enable grafana-server.service`
+- Config files is located in:
+  - Ubuntu/Debian: `/etc/grafana/grafana.ini`
 
 
 ---
