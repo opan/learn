@@ -23,7 +23,44 @@ or you can run manually with `https://docs.influxdata.com/influxdb/v1.5/introduc
 
 #### About InfluxDB
 
-InfluxDB is a time-series database.
+- InfluxDB is a time-series database.
+- Data in influxdb is organized by *time series*, which contain a measured value like *cpu load* or *temperature*.
+
+The query syntax of influxdb is pretty similar with query languange out there like mysql and postgresql.
+```sql
+CREATE DATABASE mydb; // Create new database
+SHOW DATABASES; // Show lists databases
+USE mydb; // Use specific DB
+```
+
+Most of the influxdb command must operate againts specific database except `SHOW DATABASE`.
+
+Influxdb have
+- Zero to many `points`.
+- Each `points` have
+  - `time` (timestamp). optional influxdb will provide it manually if not included
+  - `measurement` (e.g: *cpu_load*). required
+  - At least have one key-value `field` (the measured value itself, e.g: *temperature=12.3*). required
+  - Zero to many key-value `tags` containing any metadata about the value, e.g: *host=server01*, *region=EMEA*. optional
+
+You can think `measurement` is a SQL table, where the primary key is always time. `tags` and `fields` are effectively
+columns in the table while `tags` are indexed and `fields` are not.
+
+`points` are written to influxdb using the Line Protocol which follows the following format:
+```
+<measurement>[,<tag-key>=<tag-value>...] <field-key>=<field-value>[,<field2-key>=<field2-value>...] [unix-nano-timestamp]
+```
+
+Sample valid `points`
+```
+cpu,host=serverA,region=us_west value=0.64
+payment,device=mobile,product=Notepad,method=credit billed=33,licenses=3i 1434067467100293230
+stock,symbol=AAPL bid=127.46,ask=127.48
+temperature,machine=unit42,type=assembly external=25,internal=37 1434067467000000000
+```
+You can have million of measurements, you don't have to define schema and `null` values aren't stored.
+
+
 
 ---
 
@@ -66,6 +103,26 @@ Key features:
 - Store transformed data back in InfluxDB
 - Add custom user defined functions to detect anomalies
 - Integrate with HipChat, OpsGenie, Alerta, Sensu, PagerDuty, Slack and more
+
+---
+
+
+#### Integrating TICK component
+
+- Start influxdb console with `influx` command.
+- Create new database `create database your_db;`
+- Create new admin user `create admin "username" with password 'user_password' with all privileges;`
+- Check if new user and database is successfully created with `show users` and `show databases`
+- Now open the influxdb config file. It is depend on your OS:
+  - Ubuntu/Debian
+  The config file should be located in `/etc/influxdb/influxdb.conf` but you can make sure
+  with command `systemctl status influxdb`.
+  - OS X
+  In OS X, you can check where the config file is located with `brew info influxdb`.
+
+- Inside influxdb config file, change the value of `auth-enabled` from `false` to `true`.
+This config will enabled user authentication over HTTP/HTTPS
+
 
 ---
 
