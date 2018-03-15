@@ -1,6 +1,6 @@
 # TICK / InfluxData
 
-#### Installation Telegraf
+## Installation Telegraf
 
 - OS X
 ```
@@ -13,15 +13,19 @@ wget https://dl.influxdata.com/telegraf/releases/telegraf_1.5.2-1_amd64.deb
 sudo dpkg -i telegraf_1.5.2-1_amd64.deb
 ```
 
+## About Telegraf
+
+Telegraf uses plugins to input and output data. Default output plugin is InfluxDB
+
 ---
 
-#### Installation InfluxDB
+## Installation InfluxDB
 
 You can refer to this [link](https://docs.influxdata.com/influxdb/v1.5/introduction/installation/)
 You can run the influxdb service (in Mac) with `brew services start influxdb`
 or you can run manually with `https://docs.influxdata.com/influxdb/v1.5/introduction/installation/`
 
-#### About InfluxDB
+## About InfluxDB
 
 - InfluxDB is a time-series database.
 - Data in influxdb is organized by *time series*, which contain a measured value like *cpu load* or *temperature*.
@@ -64,7 +68,7 @@ You can have million of measurements, you don't have to define schema and `null`
 
 ---
 
-#### Installation Kapacitor
+## Installation Kapacitor
 
 - OS X
 ```
@@ -88,12 +92,12 @@ To make `launchd` start kapacitor at login (OS X using Homebrew)
 - Then load kapacitor `launchctl load ~/Library/LaunchAgents/homebrew.mxcl.kapacitor.plist`
 - Or if you don't want/need `launchctl` you can just run `kapacitord -config /usr/local/etc/kapacitor.conf`
 
-#### Configuration Kapacitor
+## Configuration Kapacitor
 
 Sample config can be found [here](https://github.com/influxdata/kapacitor/blob/master/etc/kapacitor/kapacitor.conf) or you can see the example by run `kapacitord config`.
 To generate new configuration file, run `kapacitord config > kapacitor.generated.conf`
 
-#### About Kapacitor
+## About Kapacitor
 
 Kapacitor is an open source data processing framework that makes it easy to create alerts, run ETL jobs and detect anomalies.
 Key features:
@@ -107,26 +111,52 @@ Key features:
 ---
 
 
-#### Integrating TICK component
+## Integrating TICK component
 
+Quick summary:
+- Telegraf collects time-series data from a variety of sources
+- InfluxDB stores a time-series data
+- Chronograf/Graphana visualizes and graphs the time-series data
+- Kapacitor provides alerting and detects anomalies in time-series data
+
+Integrating the components:
 - Start influxdb console with `influx` command.
 - Create new database `create database your_db;`
 - Create new admin user `create admin "username" with password 'user_password' with all privileges;`
 - Check if new user and database is successfully created with `show users` and `show databases`
 - Now open the influxdb config file. It is depend on your OS:
   - Ubuntu/Debian
+
   The config file should be located in `/etc/influxdb/influxdb.conf` but you can make sure
   with command `systemctl status influxdb`.
+
   - OS X
+
   In OS X, you can check where the config file is located with `brew info influxdb`.
 
 - Inside influxdb config file, change the value of `auth-enabled` from `false` to `true`.
-This config will enabled user authentication over HTTP/HTTPS
+This config will enabled user authentication over HTTP/HTTPS. Then restart influxdb server
+with `sudo systemctl restart influxdb` or `brew services restart influxdb` (execute similar command in you OS)
+
+- Update Telegraf config:
+  - Ubuntu/Debian: `/etc/telegraf/telegraf.conf` or find with `sudo systemctl status telegraf`
+  - OS X: `/usr/local/etc/telegraf.conf` or find with `brew info telegraf`
+  
+- Find `outputs.influxdb` in `telegraf.conf` and provide username and password that you already
+create in steps above for influxdb
+```
+[[outputs.influxdb]]
+  ...
+  username = "username"
+  password = "password"
+  ...
+```
+and then restart Telegraf service `sudo systemctl restart telegraf` (execute similar command in your OS)
 
 
 ---
 
-#### Misc
+## Misc
 
 - Mac
 ```
@@ -138,4 +168,6 @@ To see list services `brew services list`
 - Ubuntu/Debian
 ```
 sudo service service_name [stop|start|status]
+sudo systemctl [restart|start|stop|status] service_name # It is similar to `service` command
 ```
+
