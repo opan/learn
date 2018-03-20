@@ -218,6 +218,9 @@ and then restart Telegraf service `sudo systemctl restart telegraf` (execute sim
 - Then restart Kapacitor service (the command is similar like the other component, just change the service name)
 - You can verify if Kapacitor is running with `kapacitor task lists`
 
+#### Sample Integration with Rails
+
+- https://www.influxdata.com/blog/metrics-for-true-beginners/
 
 ---
 

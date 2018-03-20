@@ -22,4 +22,6 @@ for more explanation that generated automatically after you execute `vagrant ini
 config.vm.box = "your-package-name"
 config.vm.box_url = "the-absolute-path-to-package.box"
 ```
+- If you want to setup `private_network` IP, you can use this [private network](https://en.wikipedia.org/wiki/Private_network#Private_IPv4_address_spaces)
+- To access host machine from guest (inside Vagrant), just use the gateway provided with `netstat -rn` command inside vm.
 
