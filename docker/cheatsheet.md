@@ -27,3 +27,14 @@ Also the container simply uses whatever resoucers its needed, period.
 
 Cons:
 - Containers use the host machine's kernel.
+
+#### Docker Concepts
+
+The use of linux containers to deploy applications is called __containerizations__
+
+#### Most used commands in Docket
+
+- `docker info`: get details about your docker installation.
+- `docker run hello-world`: test docker installation by running sample docker image.
+- `docker image ls`: list out the image you have downloaded (in this example `hello-world` image).
+- `docker container ls --all`: list out `hello-world` container.
