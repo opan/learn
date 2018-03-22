@@ -41,100 +41,35 @@ The use of linux containers to deploy applications is called __containerizations
 - __Docker Client__: The command line tool that allows the user to interact with the daemon.
 - __Docker Hub__: A registry of docker images. You can think of the registry as a directory of all available docker images.
 
-#### Play with Docker busybox
-
-- Download `busybox` image with `docker pull busybox`.
-- 
-
-#### Getting started
-
-- Create new directory, lets call `sample`.
-- `cd` into new folder then create file called `Dockerfile`.
-- Copy and paste content below into `Dockerfile` as initial setup.
-    ```
-    # Use an official Python runtime as a parent image
-    FROM python:2.7-slim
-
-    # Set the working directory to /app
-    WORKDIR /app
-
-    # Copy the current directory contents into the container at /app
-    ADD . /app
-
-    # Install any needed packages specified in requirements.txt
-    RUN pip install --trusted-host pypi.python.org -r requirements.txt
-
-    # Make port 80 available to the world outside this container
-    EXPOSE 80
-
-    # Define environment variable
-    ENV NAME World
-
-    # Run app.py when the container launches
-    CMD ["python", "app.py"]
-    ```
-- If you behind a proxy server, add code below into your `Dockerfile` before the call to `pip` command above
-    ```
-    # Set proxy server, replace host:port with values for your servers
-    ENV http_proxy host:port
-    ENV https_proxy host:port
-    ```
-- Create two new files that still don't exists, `requirements.txt` and `app.py` on same folder with `Dockerfile`.
-  Then fill both files with:
-
-  `requirements.txt`
-    ```
-    Flask
-    Redis
-    ```
-
-  `app.py`
-    ```python
-    from flask import Flask
-    from redis import Redis, RedisError
-    import os
-    import socket
-
-    # Connect to Redis
-    redis = Redis(host="redis", db=0, socket_connect_timeout=2, socket_timeout=2)
-
-    app = Flask(__name__)
-
-    @app.route("/")
-    def hello():
-        try:
-            visits = redis.incr("counter")
-        except RedisError:
-            visits = "<i>cannot connect to Redis, counter disabled</i>"
-
-        html = "<h3>Hello {name}!</h3>" \
-               "<b>Hostname:</b> {hostname}<br/>" \
-               "<b>Visits:</b> {visits}"
-        return html.format(name=os.getenv("NAME", "world"), hostname=socket.gethostname(), visits=visits)
-
-    if __name__ == "__main__":
-        app.run(host='0.0.0.0', port=80)
-    ```
-- Now run `docker build -t friendlyhello .` to build docker image. We are using `-t` flag to tag it with `friendlyhello`.
-- Run the docker image with `docker run -p 4000:80 friendlyhello`
-
-#### Getting started 2
-
-- Make sure your docker installation ok with `docker run hello-world`. You will get output result something like this
-    ```
-    Hello from Docker!
-    This message shows that your installation appears to be working correctly.
-    ...
-    ```
-
-
 #### Most used commands in Docket
 
+- `docker --version`: check docker version.
 - `docker pull`: download docker image.
 - `docker run`: create new container. To test is docker installation is complete you can run `docker run hello-world`.
+  You may often use this command and combine it with flags:
+  - `docker run -d -p 80:80 --name webserver package-name`:
+    - `-d`/`--detach` flag make you run container in background and print container ID.
+    - `-p`/`--publish` flag to publish your container with specific port(s).
+    - `--name` flag to give your container a name.
+
 - `docker info`: get details about your docker installation.
+- `docker container ls --all` or `docker ps -a`: show all containers that we run. Remove `--all`/`-a` flag to see only running container.
+- `docker container stop [name|ID]`: stop one or more running containers. You can use container `name` or `ID`.
+- `docker container rm [name|ID]`: remove one or more containers.
+
+- `docker service ls`: show all service.
+- `docker service ps your_service`: show all tasks of your services.
 - `docker image ls`: list out the image you have downloaded (in this example `hello-world` image).
 - `docker container ls --all`: list out `hello-world` container.
 - `docker ps`: get list containers that are running. Add `-a` option to list all containers that we run
-- `docker rm $(docker ps -a -q -f status=exited)`: you can use this to remove all containers that has been running. This command delete all containers that have status `status=exited`. `-q` flag to return only the numeric IDs and `-f` filters output based on conditions provided.
+- `docker rm $(docker ps -a -q -f status=exited)`: you can use this to remove all containers that has been running.
+  This command delete all containers that have status `status=exited`. `-q` flag to return only the numeric IDs
+  and `-f` filters output based on conditions provided.
 
+- `docker stack rm your_stack_name`: shutdown your app.
+- `docker swarm leave --force`: shutdown 
+
+#### Tips
+
+Before you run `docker start deploy` you need to run `docker swarm init` first, otherwise you will get
+error message *this node is not a swarm manager*.
