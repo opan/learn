@@ -1,5 +1,13 @@
 # Docker
 
+> an open source project that automates the deployment of software applications
+> inside *containers* by providing additional layers of abstraction and automation of *OS-level virtualization* on linux.
+
+#### Base images vs Child images
+
+- *Base images* are images that have no parent images, usually images with an OS like ubuntu, alpine or debian.
+- *Child images* are images that build on base images and add additional functionality.
+
 #### Docker vs Vagrant
 
 [source](https://www.quora.com/What-is-the-difference-between-Docker-and-Vagrant-When-should-you-use-each-one)
@@ -28,10 +36,6 @@ Also the container simply uses whatever resoucers its needed, period.
 Cons:
 - Containers use the host machine's kernel.
 
-#### Docker Concepts
-
-The use of linux containers to deploy applications is called __containerizations__
-
 #### Docker terminology
 
 - __Images__: The blueprints of our application which form the basis of containers. We used `docker pull` command to download the image.
@@ -41,16 +45,91 @@ The use of linux containers to deploy applications is called __containerizations
 - __Docker Client__: The command line tool that allows the user to interact with the daemon.
 - __Docker Hub__: A registry of docker images. You can think of the registry as a directory of all available docker images.
 
+#### Writing your Dockerfile
+
+- `FROM`
+  Define your base image, e.g `alpine`, `ubuntu`, etc.
+
+- `LABEL`
+  You can add label to your Dockerfile. e.g:
+    ```
+    LABEL com.example.version="1.5.0"
+    LABEL your_label="LABEL"
+    ```
+- `RUN`
+  Run or execute command inside docker. e.g `RUN apt-get install package-bar`.
+  `RUN` keyword has 2 forms:
+
+  - `RUN <command>`
+    This is called __shell__, which by default is `/bin/sh -c` on linux and `cmd /S /C` on windows.
+
+  - `RUN ["executable", "param1", "param2"]`
+    This is __exec__ form
+
+  Always combine your `RUN` command to minimize layers and split into multiple line if its long enough.
+
+- `CMD`
+  This command is similar with `RUN` but it should be to execute only the software contained by the docker image.
+  `CMD` command has 3 forms:
+  
+  - `CMD ["executable", "param1", "param2"]`: __exec__ form
+  - `CMD ["param1", "param2"]`: entry point
+  - `CMD command param1 param2`: __shell__ form
+
+  `CMD`
+  Should always be used in exec form and there is must be only one `CMD` command in dockerfile.
+
+- `EXPOSE`
+  Expose specific ports on container.
+
+- `ENV`
+  Set environment variables. But it would be better to set env variables with `RUN` command.
+  Instead:
+    ```
+    FROM alpine
+    ENV ADMIN_USER="mark"
+    RUN echo $ADMIN_USER > ./mark
+    RUN unset ADMIN_USER
+    CMD sh
+    ```
+
+  You can:
+    ```
+    FROM alpine
+    RUN export ADMIN_USER="mark" \
+        && echo $ADMIN_USER > ./mark \
+        && unset ADMIN_USER
+    CMD sh
+    ```
+
+- `ADD` & `COPY`
+  These command has similar function. These command will copy new file into specific directory.
+  Despite these command is similar, but `COPY` is more preferred.
+  e.g:
+    ```
+    COPY requirements.txt /tmp/
+    RUN pip install --requirement /tmp/requirements.txt
+    COPY . /tmp/
+
+    ADD test relativeDir/          # adds "test" to `WORKDIR`/relativeDir/
+    ADD test /absoluteDir/         # adds "test" to /absoluteDir/
+    ```
+
+
+
 #### Most used commands in Docket
 
 - `docker --version`: check docker version.
 - `docker pull`: download docker image.
+- `docker inspect [image]`: get image details.
 - `docker run`: create new container. To test is docker installation is complete you can run `docker run hello-world`.
   You may often use this command and combine it with flags:
   - `docker run -d -p 80:80 --name webserver package-name`:
     - `-d`/`--detach` flag make you run container in background and print container ID.
     - `-p`/`--publish` flag to publish your container with specific port(s).
     - `--name` flag to give your container a name.
+
+  - `docker run -it [image] [command]`: will make you able to run multiple command on single container
 
 - `docker info`: get details about your docker installation.
 - `docker container ls --all` or `docker ps -a`: show all containers that we run. Remove `--all`/`-a` flag to see only running container.
@@ -73,3 +152,9 @@ The use of linux containers to deploy applications is called __containerizations
 
 Before you run `docker start deploy` you need to run `docker swarm init` first, otherwise you will get
 error message *this node is not a swarm manager*.
+
+- [Docker for beginner](https://github.com/docker/labs/blob/master/beginner/chapters/alpine.md)
+
+Best practices:
+- https://hackernoon.com/tips-to-reduce-docker-image-sizes-876095da3b34
+
