@@ -114,6 +114,17 @@ Cons:
     ADD test relativeDir/          # adds "test" to `WORKDIR`/relativeDir/
     ADD test /absoluteDir/         # adds "test" to /absoluteDir/
     ```
+    
+- `WORKDIR`
+  This command will sets the working directory for any `RUN`, `CMD`, `ENTRYPOINT`, `COPY` and `ADD` command
+  that follow it in the dockerfile. At its best, `WORKDIR` should always use absolute paths.
+  e.g:
+    ```
+    WORKDIR /a
+    WORKDIR b
+    WORKDIR c
+    RUN pwd
+    ```
 
 
 
