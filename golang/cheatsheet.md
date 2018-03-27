@@ -1,6 +1,6 @@
 # Go Programming Language
 
-#### Installing Go
+## Installing Go
 
 When installing Go, you need to set `$GOPATH` which by default is `$HOME/go`.
 But you can change it as you wish but make sure you set it in your `zshrc` or `bashrc` file.
@@ -21,6 +21,8 @@ Ex: `math.Pi` vs `math.pi`
 
 -----
 
+## Data types
+
 In Golang you need to define data type such as `int` and `string` when defining parameters.
 Ex: `var pi int`, `var x string`
 
@@ -28,6 +30,8 @@ There is some difference with C language about how to define a variable which th
 
 
 ----
+
+## Functions
 
 A function can return any number of results
 There is two type of return in Golang.
@@ -53,6 +57,7 @@ Function in golang can be a closures.
 A closure is a function value that references variables from outside its body.
 The function may access and assign to the referenced variables; in this sense the function is "bound" to the variables.
 Ex:
+
 ```go
 func adder() func(int) int {
   sum := 0
@@ -76,6 +81,8 @@ func main() {
 
 
 ----
+
+## Variables
 
 Variables are defined with `var` keyword and can be inside package or function level. Variables can have an initializer, one per variable.
 If variables defined with an initializer, then we can omit the data type and the variable will take the type of the initializer
@@ -130,9 +137,13 @@ Ex:
 
 ----
 
+## Constant
+
 In Golang also exists constant with keyword `const` and can be character, numeric, string, boolean. Constant cannot be declared with `:=` syntax.
 
 ----
+
+## For
 
 `for` is the only one looping structure in Golang. How you write `for` syntax is almost same like you do in JavaScript.
 Ex:
@@ -153,6 +164,8 @@ If you want to create an infinite looping, then leave out the three component.
 
 
 -----
+
+## If
 
 `if` statements are like `for`, no need to surround the expression with parentheses `()` but braces is required. Variables declared inside `if` statements is not accessible outside the `if` and/or `else` scope.
 Ex:
@@ -176,6 +189,8 @@ if a = math.Sqrt(100); a > 10 {
 
 
 ----
+
+## Switch
 
 `switch` also exists in Golang. `switch` declaration is pretty similar with `if`. They can have a short statement before condition statement. `switch` in Golang only runs the selected case, not all the cases that follow so the `break` statement in each `case` is don't needed. Also, the switch cases are not need to be constants.
 Ex:
@@ -212,6 +227,8 @@ Ex:
 ```
 
 ----
+
+## Defer
 
 In Golang there is called Defer (`defer`). `defer` command is used to defer a function until the surrounding function returns or finish executed.
 Ex:
@@ -253,6 +270,8 @@ done
 
 ----
 
+## Pointers
+
 Golang has pointers. Pointers holds the memory address of value.
 Ex:
 ```go
@@ -273,8 +292,11 @@ How to read pointers? (Thanks to mas Iman for this tips :thumbsup:)
 
 ----
 
+## Struct
+
 There is also `struct` in Golang. `struct` is collection of fields.
 Ex:
+
 ```go
 type Str struct {
   number int
@@ -319,9 +341,21 @@ func main() {
 }
 ```
 
+You can add struct tags.
+Ex:
+
+```go
+type Vertex struct {
+  Status string `json:"status"`
+  Message string `json:"message"`
+}
+```
+
+This is usefull for example when you want to response JSON REST API call.
+
 ----
 
-#### Array and Slices
+## Array and Slices
 
 Array is defined with `[n]T` with `n` is the size for the array and `T` is the array type.
 Ex:
@@ -493,7 +527,7 @@ You can also test the is present with two-value assignment with `elm, ok = m[key
 
 ----
 
-#### Methods
+## Methods
 
 In Golang there is no class but you can create methods on types. A method is a function with __special receiver__ argument.
 Ex:
@@ -522,6 +556,7 @@ There is a difference when method and function use *pointer argument*.
 When function use pointer argument, the function must take a pointer while method can take either a value or a pointer.
 And function that take a value argument must take a value of the specific type.
 Ex:
+
 ```go
 var v Vertex
 
@@ -556,7 +591,7 @@ Sum(s)
 
 ---
 
-#### Interface
+## Interface
 
 Interface in Golang is an collection of methods. Interface is like *duck typing* in Ruby. For example,
 if you declare interface `human` with `Speak()` as the method inside the interface. Then if any type implement
@@ -615,7 +650,7 @@ f := i.(float64) // This will trigger `panic` because you don't provide the seco
 
 ----
 
-#### Goroutines
+## Goroutines
 
 Goroutines is a lightweight thread managed by the Go runtime. Goroutine create with `go` keyword
 Ex:
@@ -626,7 +661,7 @@ Here `Function` will be running on new goroutine while the execution time is on 
 
 ----
 
-#### Channels
+## Channels
 
 Channel is used for communicate between go routine. Channel declared with `chan` keyword.
 Ex:
@@ -676,13 +711,13 @@ func main() {
 
 ----
 
-#### Select
+## Select
 
 `select` statement lets a goroutine wait on multiple communication operations.
 
 ---
 
-#### Testing in Go
+## Testing in Go
 
 Golang has built-in testing called `go test` and a package `testing` which combine to give a minimal but complete
 testing experience. In Golang, the syntax is deliberately avoids the use of assertions and leaves the responsibility for checking
@@ -722,3 +757,10 @@ func TestSum(t *testing.T) {
   }
 }
 ```
+
+
+-----
+
+## Cheatsheet from others
+
+- [go-lang-cheat-sheet](https://github.com/a8m/go-lang-cheat-sheet)
