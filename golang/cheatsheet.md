@@ -764,3 +764,31 @@ func TestSum(t *testing.T) {
 ## Cheatsheet from others
 
 - [go-lang-cheat-sheet](https://github.com/a8m/go-lang-cheat-sheet)
+
+----
+
+## Tips and Trick
+
+### Write file
+
+```go
+
+	if len(metrics) == 0 {
+		return nil
+	}
+
+	f, err := os.OpenFile("/Users/opanmustopah/test-go.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		return err
+	}
+
+	defer f.Close()
+
+	for _, metric := range metrics {
+		d, err := h.serializer.Serialize(metric)
+		if _, err = f.Write(d); err != nil {
+			return err
+		}
+	}
+	return nil
+```
