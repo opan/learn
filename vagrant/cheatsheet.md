@@ -11,7 +11,7 @@ for more explanation that generated automatically after you execute `vagrant ini
 - `vagrant halt` is used to shutdown the running machine vagrant is managing.
 - `vagrant package` is used to packages current running virtual box into a re-usable box. This command is useful for cloning vagrant box.
 
-#### How to clone vagrant box
+## How to clone vagrant box
 
 - run `vagrant package` inside vagrant directory that you want to clone.
 - It will output new file called (by default) `package.box`.
@@ -25,3 +25,7 @@ config.vm.box_url = "the-absolute-path-to-package.box"
 - If you want to setup `private_network` IP, you can use this [private network](https://en.wikipedia.org/wiki/Private_network#Private_IPv4_address_spaces)
 - To access host machine from guest (inside Vagrant), just use the gateway provided with `netstat -rn` command inside vm.
 
+## Sending file to vagrant box
+
+To send file from host machine to vagrant box, we can use `file` provisioning.
+To make sure the file provisioning is running we can run `vagrant provision`

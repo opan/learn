@@ -759,6 +759,37 @@ func TestSum(t *testing.T) {
 ```
 
 
+----
+
+## Init function
+
+There is function called `init()` in golang. This function works like callback `before-action`.
+So basically everything you put inside this function will be executed before the `main` function but after 
+variables initialization. You can also have multiple `init()` function in one package.
+
+```go
+
+func Foo() {
+  fmt.Println("I will executed third")
+}
+
+func main() {
+  fmt.Println("I will executed second")
+  Foo()
+}
+
+func init() {
+  fmt.Println("I will executed first")
+}
+
+```
+
+---
+
+## JSON
+
+
+
 -----
 
 ## Cheatsheet from others
