@@ -9,6 +9,11 @@ IPsec = Internet Protocol Security (IPsec)
 
 StrongSwan => an open source IPsec daemon
 
+----
+
+## Setup an IKEv2 VPN Server with StrongSwan on Ubuntu 16.04
+
+Source: https://www.digitalocean.com/community/tutorials/how-to-set-up-an-ikev2-vpn-server-with-strongswan-on-ubuntu-16-04
 
 ----
 
@@ -175,3 +180,33 @@ iptables -L -v -n
 ```
 `-v` option will give you packet and byte information.
 `-n` option will list everything numerically.
+
+-----
+
+## Stateful and Stateless app
+
+Stateful app => app that saves client data from activities of one session for use in the next session.
+The data is saved is called *apps state*.
+
+Stateless app => the opposite of stateful app, this app doesn't record any previous state
+
+----
+
+## DNS BIND (Berkeley Internet Name Domain)
+
+BIND itself is an open source software that enables you to publish your Domain Name System (DNS)
+information on the internet, and to resolve DNS queries for your users.
+
+BIND has three parts:
+- Domain Name Resolver: resolves questions about names by sending those questions to appropriate servers
+and responding appropriately to the servers replies.
+- Domain Name Authority server: an authoritive DNS server answers request from resolvers, using information
+about the domain names it is authoritive for.
+- Tools
+
+
+----
+
+## DNS (Domain Name System)
+
+
