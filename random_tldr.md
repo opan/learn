@@ -209,4 +209,60 @@ about the domain names it is authoritive for.
 
 ## DNS (Domain Name System)
 
+On simple terms, DNS is used to translate IP address which is hard to read and remember by human into something
+easier for human to read and remember, such as google.com and others.
+
+DNS servers => where your computer search IP address for specific DNS (usally provided by ISP (Internet Service Providers) or the router could be the DNS server but still forward it to ISP)
+
+Computers cache DNS locally
+
+IANA (Internet Assigned Numbers Authority) => organization under the IAB (Internet Architecture Board) of the Internet Society that, under a contract from the U.S government, has overseen the allocation of Internet Protocol addresses to ISP. IANA also has had responsibility for the registry for any "unique parameters and protocol values" for internet operation. These including port numbers, character sets, and MIME media access type.
+
+#### DNS Records
+
+DNS records => a database record used to map a URL to an IP address and this is stored on DNS servers.
+
+Most common record types:
+- A (address) => used to map a hostname to an IP address. Generally, A record are IP addresses.
+  If a computer consists of multiple IP addresses, adapter cards or both, it must possess multiple address records.
+
+- CNAME (canonical name) => can be used to set an alias for the hostname.
+
+- MX (mail exchanges) => permits mail to be sent to the right mail servers located in the domain.
+  Other than IP addresses, MX records include fully-qualified domain names.
+
+- NS (name server) => describea a name server for the domain that permits DNS lookups within several zones.
+  Every primary as well as secondary name server must be reported via this record.
+
+- PTR (pointer) => creates a pointer, which maps an IP address to the host name in order to do reverse lookup.
+
+- SOA (start of pointer) => declares the most authoritative host for the zone. Every zone file should include an SOA record.
+
+- TXT (text record) => permits the insertion of arbitrary text into a DNS record. These records add SPF records into a domain.
+
+
+Other record types:
+- TTL (time-to-live) => sets the period of data, which is ideal when a recursive DNS server queries the domain name information.
+
+#### DNS Zones
+
+DNS zone => contains all the domain names the domain with the same domain name contains, except for domain names in delegated subdomains.
+
+ex: 
+The top level domain ca (for Canada) has subdomains called ab.ca, on.ca, and qc.ca.
+Authority for the ab.ca, on.ca and qc.ca domains may be delegated to nameservers in each province.
+The domain ca contains all the data in ca plus all the data  in ab.ca, on.ca and qc.ca.
+However, the zone ca contains only the data in ca, which is probably mostly pointers to the delegated subdomains ab.ca, on.ca and qc.ca are separate zones from the ca zone.
+
+** Don't confuse DNS Zone with DNS Domains **
+DNS zone can contain multiple domains or just one domain, the important thing to remember is that it is used for delegating control of portions of the namespace.
+DNS zone are used to delegate administrative rights to different parts of the namespace.
+
+#### DNS Forward & DNS Reverse
+
+DNS forward => type of DNS request in which a domain name is used to obtain its corresponding IP address.
+A forward DNS request is the opposite of a reverse DNS lookup.
+
+DNS reverse => using an IP address to find a domain name.
+
 
