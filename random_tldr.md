@@ -23,23 +23,23 @@ Source: https://www.digitalocean.com/community/tutorials/initial-server-setup-wi
 
 - Login as `root`
 
-    ssh root@your_server_ip
+      ssh root@your_server_ip
 
   Or after you logged in to your server you can run
 
-    $ sudo su
+      $ sudo su
 
 - Create new user
   As `root`, run command below (replace the bracket your value)
   
-    # adduser [newuser]
+      # adduser [newuser]
 
   You will be prompted to setup password and other additional info about the user
 
 - Setup root privileges
   Add new created user to `sudo` group (still as `root`)
 
-    # usermod -aG sudo [newuser]
+      # usermod -aG sudo [newuser]
 
 - Adding public key authentication (Optional but recommended)
 
@@ -48,12 +48,12 @@ Source: https://www.digitalocean.com/community/tutorials/initial-server-setup-wi
 
   Stil as `root`, we will switch to newly created user and setup `ssh` directory
 
-    # sudo - [newuser]
-    $ mkdir ~/.ssh
-    $ chmod 700 ~/.ssh
-    $ touch ~/.ssh/authorized_keys
-    $ chmod 600 ~/.ssh/authorized_keys
-    $ nano ~/.ssh/authorized_keys
+      # sudo - [newuser]
+      $ mkdir ~/.ssh
+      $ chmod 700 ~/.ssh
+      $ touch ~/.ssh/authorized_keys
+      $ chmod 600 ~/.ssh/authorized_keys
+      $ nano ~/.ssh/authorized_keys
 
   Then paste client SSH public key into file above
   
@@ -61,41 +61,41 @@ Source: https://www.digitalocean.com/community/tutorials/initial-server-setup-wi
 
   As `root` or newly created user from step above
     
-    $ sudo nano /etc/ssh/sshd_config
+      $ sudo nano /etc/ssh/sshd_config
 
   and edit config like below
 
-    PasswordAuthentication no
-    PubkeyAuthentication yes
-    ChallengeResponseAuthentication no
+      PasswordAuthentication no
+      PubkeyAuthentication yes
+      ChallengeResponseAuthentication no
 
   then reload SSH daemon
     
-    $ sudo systemctl reload sshd
+      $ sudo systemctl reload sshd
 
 - Test SSH login
 
   Test login into server with newly created user via SSH
 
-    ssh [newuser]@[your_server_ip]
+      ssh [newuser]@[your_server_ip]
   
 - Setup a basic Firewall (UFW)
 
   Check available application
     
-    $ sudo ufw app list
+      $ sudo ufw app list
 
   Allow application listed from command above
     
-    $ sudo ufw allow OpenSSH
+      $ sudo ufw allow OpenSSH
 
   Enable the firewall, then press "y" if prompted
     
-    $ sudo ufw enable
+      $ sudo ufw enable
 
   Check firewall status. Add `-v` to make the output more detail
 
-    $ sudo ufw status
+      $ sudo ufw status
 
 ----
 
