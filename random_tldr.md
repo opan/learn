@@ -218,6 +218,8 @@ Computers cache DNS locally
 
 IANA (Internet Assigned Numbers Authority) => organization under the IAB (Internet Architecture Board) of the Internet Society that, under a contract from the U.S government, has overseen the allocation of Internet Protocol addresses to ISP. IANA also has had responsibility for the registry for any "unique parameters and protocol values" for internet operation. These including port numbers, character sets, and MIME media access type.
 
+FQDN (Fully Qualified Domain Name) => an absolute domain name.
+
 #### DNS Records
 
 DNS records => a database record used to map a URL to an IP address and this is stored on DNS servers.
@@ -231,12 +233,12 @@ Most common record types:
 - MX (mail exchanges) => permits mail to be sent to the right mail servers located in the domain.
   Other than IP addresses, MX records include fully-qualified domain names.
 
-- NS (name server) => describea a name server for the domain that permits DNS lookups within several zones.
+- NS (name server) => describe a name server for the domain that permits DNS lookups within several zones.
   Every primary as well as secondary name server must be reported via this record.
 
 - PTR (pointer) => creates a pointer, which maps an IP address to the host name in order to do reverse lookup.
 
-- SOA (start of pointer) => declares the most authoritative host for the zone. Every zone file should include an SOA record.
+- SOA (start of authority) => declares the most authoritative host for the zone. Every zone file should include an SOA record.
 
 - TXT (text record) => permits the insertion of arbitrary text into a DNS record. These records add SPF records into a domain.
 
@@ -257,6 +259,46 @@ However, the zone ca contains only the data in ca, which is probably mostly poin
 ** Don't confuse DNS Zone with DNS Domains **
 DNS zone can contain multiple domains or just one domain, the important thing to remember is that it is used for delegating control of portions of the namespace.
 DNS zone are used to delegate administrative rights to different parts of the namespace.
+
+#### DNS Zone file structure and record contents
+
+Directive begin with `$`. List directives:
+- $TTL => Time to live value for the zone.
+- $ORIGIN => Defines base name -used in domain name subtitution.
+- $INCLUDE => Include a file
+
+$TTL directive must appear at the top of the zone file before the SOA record.
+The SOA must be present in a zone file, and defines the domain global values mainly to do with zone transfer.
+
+If an $ORIGIN directive is not defined - BIND synthesizes an $ORIGIN from the zone name in the named.conf file. Ex:
+
+```conf
+
+// named.conf file fragment
+
+zone "example.com" in {
+  type master;
+  file "pri.example.com";
+}
+```
+
+$ORIGIN values must be 'qualified' (they end with a 'dot')
+
+$ORIGIN is used in two contexts during zone file processing:
+- The symbol `@` forces subtitution of the current (or synthesized) value of $ORIGIN. The `@` symbol is replaced with the current value of $ORIGIN
+- The current value of $ORIGIN is added to any 'unqualified' name (any name which does not end in a 'dot')
+
+** Important **
+Every time you edit the zone file, increment the serial value before you restart named otherwise BIND won't apply the change to the zone.
+
+#### DNS generic record format
+
+Resource records have two representations. A textual format described in this chapter
+
+```owner-name | ttl | class | type | type-specific-data```
+Where:
+owner-name => owner-name or label of the node in the zone file to which
+
 
 #### DNS Forward & DNS Reverse
 
