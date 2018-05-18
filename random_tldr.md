@@ -295,7 +295,10 @@ Every time you edit the zone file, increment the serial value before you restart
 
 Resource records have two representations. A textual format described in this chapter
 
-```owner-name | ttl | class | type | type-specific-data```
+```
+owner-name | ttl | class | type | type-specific-data
+```
+
 Where:
 owner-name => owner-name or label of the node in the zone file to which
 
@@ -308,3 +311,60 @@ A forward DNS request is the opposite of a reverse DNS lookup.
 DNS reverse => using an IP address to find a domain name.
 
 
+-----
+
+## LXC (Linux Container)
+
+```bash
+
+sudo apt-get install lxd lxd-client # if not installed yet
+sudo lxd init
+lxc launch ubuntu:16.04 app01
+lxc list
+lxc start app01
+lxc stop app01
+lxc restart app01
+lxc pause app01
+lxc exec app01 bash
+
+# Rename/move container
+lcx move {old} {new}
+
+```
+
+------
+
+## Consul
+
+Service Discovery
+
+consul servers
+consul agent
+
+#### Install
+
+On Linux:
+- Create bash file named `consul.sh` with content like below:
+
+      #!/bin/bash
+      apt-get install -y curl unzip
+
+      mkdir -p /var/lib/consul
+      mkdir -p /usr/share/consul
+      mkdir -p /etc/consul/conf.d
+
+      curl -OL https://releases.hashicorp.com/consul/0.7.5/consul_0.7.5_linux_amd64.zip
+      unzip consul_0.7.5_linux_amd64.zip
+      mv consul /usr/local/bin/consul
+
+      # Remove commands below if you don't want to install consul web ui
+      curl -OL https://releases.hashicorp.com/consul/0.7.5/consul_0.7.5_web_ui.zip
+      unzip consul_0.7.5_web_ui.zip -d dist
+      mv dist /usr/share/consul/ui
+
+- But make sure the version is up-to-date
+- Run with `sudo ./consul.sh`
+
+On macOS:
+
+- Run `brew update && brew install consul`
