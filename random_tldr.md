@@ -31,7 +31,7 @@ Source: https://www.digitalocean.com/community/tutorials/initial-server-setup-wi
 
 - Create new user
   As `root`, run command below (replace the bracket your value)
-  
+
       # adduser [newuser]
 
   You will be prompted to setup password and other additional info about the user
@@ -313,7 +313,7 @@ DNS reverse => using an IP address to find a domain name.
 
 -----
 
-## LXC (Linux Container)
+## LXC (Linux Container) and LXD (LXC Manager)
 
 ```bash
 
@@ -330,16 +330,38 @@ lxc exec app01 bash
 # Rename/move container
 lcx move {old} {new}
 
+# Login to container with another user
+lxc exec app01 -- sudo --login --user ubuntu
+
 ```
+
+
+#### LXD Installation
+
+```bash
+sudo apt-get update && sudo apt-get install zsfutils-linux # LXD storage recommendation is using ZSF
+
+sudo lxd init
+
+# Prompt from command above
+# Do you want to configure a new storage pool: yes
+# Name of the storage backend to use (dir or zfs): zfs
+# Create a new zfs pool: yes
+# Name of the new zfs pool: lxd
+# Would you like to use an existing block device: no
+# Size in GB of the new loop device (1GB mininum) [default: 15]: 15
+# Would you like LXD to be available over the network: no (if you choose yes then you will able to manage LXD throuhg local computer without SSH)
+# Do you want to configure the LXD bridge: yes
+
+```
+
+
 
 ------
 
 ## Consul
 
 Service Discovery
-
-consul servers
-consul agent
 
 #### Install
 
@@ -362,9 +384,77 @@ On Linux:
       unzip consul_0.7.5_web_ui.zip -d dist
       mv dist /usr/share/consul/ui
 
+
+
 - But make sure the version is up-to-date
 - Run with `sudo ./consul.sh`
 
 On macOS:
 
 - Run `brew update && brew install consul`
+
+
+## GIT
+
+Passing private key when `git clone`: `ssh-agent bash -c 'ssh-add /path/privatekey; git clone your-repo-path'`
+
+#### Rebase (git rebase)
+
+*Rule of thumb*: Don't rebase shared branch
+
+
+-----
+
+## SAML (Security Assertion Markup Languange)
+
+LDAP (Lighweight Directory Access Protocol)
+
+
+#### SAML perks:
+1. No need to type in credentials
+2. No need to remember and renew passwords
+3. No weak passwords
+
+
+
+#### SAML (basic flow):
+1. User access the app
+2. The app will create SAML request to idP (identity provider)
+3. idP build SAML response and send back to the app
+4. The app verify SAML response from idP and log user in
+
+
+#### How SAML works:
+- User access remote application using a link on an intranet, a bookmark or similar.
+- The application identifies the user's origin (by application subdomain, or IP address or similar) and redirects the user back to the identity provider (IdP), asking for authentication.
+  This is the authentication request.
+- The user either has an existing active browser session with the identity provider or establishes one by logging into the IdP.
+- The IdP builds the authentication response in the form of an XML-document containing the user's username or email address, signs it using an X.509 certificate, and
+  posts this information to the service provider (SP).
+- The SP, which already knows the IdP and has a certificate fingerprint, retrieves the authentication response and validates it using the certificate fingerprint.
+- The identity of the user is established and the user is provided with app access.
+
+
+
+You need
+- idP
+- Service Provider (SP)
+
+
+
+
+----
+
+
+## Kubernetes
+
+POD
+
+kubectl -> CLI from client
+API server -> the only one connector to ETCD
+scheduler
+controller-manager
+kubelet -> agent, middlemen
+ETCD -> storage to keep states
+Proxy
+
