@@ -405,9 +405,12 @@ Passing private key when `git clone`: `ssh-agent bash -c 'ssh-add /path/privatek
 
 -----
 
-## SAML (Security Assertion Markup Languange)
+## SAML (Security Assertion Markup Languange), CAS (Central Authentication Service)
 
-LDAP (Lighweight Directory Access Protocol)
+
+#### Directory Services:
+- LDAP (Lighweight Directory Access Protocol)
+- AD (Active Directory)
 
 
 #### SAML perks:
@@ -435,11 +438,50 @@ LDAP (Lighweight Directory Access Protocol)
 - The identity of the user is established and the user is provided with app access.
 
 
+----
 
-You need
-- idP
-- Service Provider (SP)
 
+#### CAS (Central Authentication Service)
+
+is: SSO (Single Sign On) for protocol for the web
+
+CAS protocol involves 3 parties:
+- A client web browser
+- The web application requesting authentication
+- The CAS server
+
+** CAS is a protocol, though there is a software that using the same name **
+
+
+#### CAS Purpose
+
+- CAS allows multi-tier authentication via proxy address.
+- Permit user to access multiple application while providing their credentials (such as userid and password) only once.
+- Allows web application to authenticate users without gaining access to a user's security credentials such as password.
+
+
+#### How CAS works
+- The client visits an application requiring authentication, the application redirects it to CAS.
+- CAS validates the client's authenticiy, usually by checking a username and password againts database (such as Kerberos, LDAP or Active Directory)
+- If the authentication succeeds, CAS returns the client to the application, passing along a service ticket (a ticket is like some generated number by a network server for a client).
+- The application then validates the ticket by contacting CAS over a secure connection and providing its own service identifier and the ticket.
+- CAS then gives the application trusted information about whether a particular user has successfully authenticated.
+
+
+----
+
+
+## screen
+
+- Start with `script /dev/null` if message like this appear `Must be connected to a terminal`
+
+- Create new session with name `screen -S sessionname`
+
+- Detach screen with `ctrl + a` then press `d` or `screen -d`
+
+- Reattach screen with `screen -r sessionname`
+
+- Terminate screen with `screen -X quit`. Run this command inside attached screen you want to kill
 
 
 
