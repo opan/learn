@@ -339,7 +339,7 @@ lxc exec app01 -- sudo --login --user ubuntu
 #### LXD Installation
 
 ```bash
-sudo apt-get update && sudo apt-get install zsfutils-linux # LXD storage recommendation is using ZSF
+sudo apt-get update && sudo apt-get install zfsutils-linux # LXD storage recommendation is using ZSF
 
 sudo lxd init
 
@@ -462,7 +462,7 @@ CAS protocol involves 3 parties:
 
 #### How CAS works
 - The client visits an application requiring authentication, the application redirects it to CAS.
-- CAS validates the client's authenticiy, usually by checking a username and password againts database (such as Kerberos, LDAP or Active Directory)
+- CAS validates the client's authenticity, usually by checking a username and password againts database (such as Kerberos, LDAP or Active Directory)
 - If the authentication succeeds, CAS returns the client to the application, passing along a service ticket (a ticket is like some generated number by a network server for a client).
 - The application then validates the ticket by contacting CAS over a secure connection and providing its own service identifier and the ticket.
 - CAS then gives the application trusted information about whether a particular user has successfully authenticated.
@@ -472,6 +472,8 @@ CAS protocol involves 3 parties:
 
 
 ## screen
+
+Tips: https://askubuntu.com/questions/325807/arrow-keys-home-end-tab-complete-keys-not-working-in-shell
 
 - Start with `script /dev/null` if message like this appear `Must be connected to a terminal`
 
@@ -500,3 +502,16 @@ kubelet -> agent, middlemen
 ETCD -> storage to keep states
 Proxy
 
+----
+
+## SSH Tips and Tricks
+
+To clone with specifying private ssh keys: `ssh-agent bash -c 'ssh-add /root/.ssh/id_mac_rsa; git clone git@source.golabs.io:novigrad/yggdrasil.git'`. But you must set the private keys permission to `400` with `sudo chown 400 private_key`
+
+
+## Setup NGROK
+
+- Download from their official website
+- Extract `ngrok.zip` to specific folder
+- Run `./ngrok auth tokenKey` to add your auth token to your `.ngrok/ngrok.yml` file
+- Run `./ngrok help` for more help.
