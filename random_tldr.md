@@ -181,6 +181,11 @@ iptables -L -v -n
 `-v` option will give you packet and byte information.
 `-n` option will list everything numerically.
 
+#### Forwarding SSH for LXC container
+```
+sudo iptables -t nat -A PREROUTING -p tcp -i enp0s8 --dport 9001 -j DNAT --to 240.15.0.179:22
+```
+
 -----
 
 ## Stateful and Stateless app
@@ -335,6 +340,30 @@ lxc exec app01 -- sudo --login --user ubuntu
 
 ```
 
+
+#### Upgrading LXD
+
+```
+# Remove old version
+sudo apt-get remove --purge lxd lxd-client
+
+# Install using snap
+# snap by installed by default on ubuntu 16.04. Otherwise you need to install with `sudo apt-get install snapd`
+sudo snap install lxd
+
+```
+
+#### User permissions
+```
+# Create lxd group is not exist
+sudo groupadd --system lxd
+
+# Add user to lxd group
+sudo usermod -G lxd -a <username>
+
+# If you wasn't already part of the lxd group
+newgrp lxd
+```
 
 #### LXD Installation
 
