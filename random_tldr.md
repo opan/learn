@@ -338,6 +338,9 @@ lcx move {old} {new}
 # Login to container with another user
 lxc exec app01 -- sudo --login --user ubuntu
 
+# Or
+lxc exec app01 sudo su ubuntu
+
 ```
 
 
@@ -365,6 +368,29 @@ sudo usermod -G lxd -a <username>
 newgrp lxd
 ```
 
+#### Talk to remote LXD server
+```
+# Run on the LXD server at least once
+
+# [::] will use 8443 default, or you can specify [::]:8443
+lxc config set core.https_address "[::]"
+lxc config set core.trust_password some-password
+
+# To talk with remote LXD server
+lxc remote add host-a <ip address or DNS>
+```
+
+#### Add ssh authorized keys
+```
+lxc profile edit default
+
+# Add this under 'config' section
+config:
+  user.user-data: |
+    ssh_authorized_keys:
+      - ssh-key public@user
+```
+
 #### LXD Installation
 
 ```bash
@@ -385,6 +411,18 @@ sudo lxd init
 ```
 
 
+#### Bash script to delete multiple container at once
+```bash
+#!/bin/bash
+container_prefix=$1
+container_list=$(lxc list --columns=n --format=csv | grep $container_prefix)
+for container in $container_list
+do
+  $(lxc delete $container -f 2>&1)
+done
+```
+
+Save it to some file and make it executable `sudo chmod +x filename`. Use it with `./filename  <container name or container prefix>`
 
 ------
 
