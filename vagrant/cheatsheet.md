@@ -29,3 +29,12 @@ config.vm.box_url = "the-absolute-path-to-package.box"
 
 To send file from host machine to vagrant box, we can use `file` provisioning.
 To make sure the file provisioning is running we can run `vagrant provision`
+
+## Sync folder between Vagrant and Host
+
+source for below: https://blog.theodo.fr/2017/07/speed-vagrant-synced-folders/
+```
+config.vm.synced_folder "source/dir", "destination/dir", type: "nfs",
+  mount_options: ['rw', 'vers=3', 'tcp'],
+  linux__nfs_options: ['rw', 'no_subtree_check', 'all_squash', 'async']
+```
