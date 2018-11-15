@@ -71,7 +71,7 @@ Cons:
 - `CMD`
   This command is similar with `RUN` but it should be to execute only the software contained by the docker image.
   `CMD` command has 3 forms:
-  
+
   - `CMD ["executable", "param1", "param2"]`: __exec__ form
   - `CMD ["param1", "param2"]`: entry point
   - `CMD command param1 param2`: __shell__ form
@@ -114,7 +114,7 @@ Cons:
     ADD test relativeDir/          # adds "test" to `WORKDIR`/relativeDir/
     ADD test /absoluteDir/         # adds "test" to /absoluteDir/
     ```
-    
+
 - `WORKDIR`
   This command will sets the working directory for any `RUN`, `CMD`, `ENTRYPOINT`, `COPY` and `ADD` command
   that follow it in the dockerfile. At its best, `WORKDIR` should always use absolute paths.
@@ -128,7 +128,7 @@ Cons:
 
 
 
-#### Most used commands in Docket
+#### Most used commands in Docker
 
 - `docker --version`: check docker version.
 - `docker pull`: download docker image.
@@ -157,7 +157,8 @@ Cons:
   and `-f` filters output based on conditions provided.
 
 - `docker stack rm your_stack_name`: shutdown your app.
-- `docker swarm leave --force`: shutdown 
+- `docker swarm leave --force`: shutdown
+- `docker rmi -f $(docker images -a --filter=dangling=true -q)`: remove unused images
 
 #### Tips
 
